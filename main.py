@@ -5,6 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from fastapi.openapi.docs import get_redoc_html
 from app.api.v1 import auth, products, customers, suppliers, addresses, categories, metadata, coupons
 from app.core.config import settings
 
@@ -41,6 +42,7 @@ app = FastAPI(
     license_info={
         "name": "MIT",
     },
+    redoc_url=None, # Desativa o ReDoc padrão que usa a CDN bugada
 )
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -98,9 +100,17 @@ app.include_router(categories.router)
 app.include_router(metadata.router)
 app.include_router(coupons.router)
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def root():
     return {"message": "Bem-vindo à API de E-commerce"}
+
+@app.get("/redoc", include_in_schema=False)
+async def redoc_html():
+    return get_redoc_html(
+        openapi_url=app.openapi_url,
+        title=app.title + " - ReDoc",
+        redoc_js_url="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js",
+    )
 
 # Customização do Schema OpenAPI para garantir que o Bearer Auth seja exibido corretamente
 def custom_openapi():
