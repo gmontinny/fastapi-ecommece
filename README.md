@@ -192,6 +192,19 @@ Para acessar a maioria dos endpoints, você precisará estar autenticado.
 - **Descrição**: Gera um novo `access_token` e um novo `refresh_token` sem a necessidade de reautenticar com e-mail e senha.
 - **Parâmetro de Consulta**: `refresh_token` (o token recebido anteriormente no login ou refresh)
 
+#### Expiração de Tokens
+O sistema utiliza dois tipos de tokens com tempos de vida distintos para equilibrar segurança e usabilidade:
+
+- **Access Token (Token de Acesso)**:
+  - **Duração**: 30 minutos.
+  - **Uso**: Deve ser enviado em todas as requisições protegidas no cabeçalho `Authorization: Bearer <token>`.
+  - **Segurança**: Por ter vida curta, minimiza o risco em caso de interceptação.
+
+- **Refresh Token (Token de Atualização)**:
+  - **Duração**: 7 dias.
+  - **Uso**: Utilizado exclusivamente no endpoint `/auth/refresh` para obter um novo par de tokens.
+  - **Vantagem**: Permite que o usuário permaneça logado por mais tempo sem precisar reinserir suas credenciais (e-mail/senha) a cada 30 minutos. Quando o `refresh_token` expira, o usuário deve realizar um novo login.
+
 #### Como Usar o Token no Swagger
 Para testar endpoints protegidos diretamente pelo Swagger UI:
 1. Acesse `/docs`.
