@@ -124,7 +124,7 @@ O projeto utiliza um serviço assíncrono para consultar endereços brasileiros 
 
 - **JWT**: Senhas são criptografadas com `bcrypt`. A API é protegida por autenticação JWT; os endpoints exigem que o token gerado seja enviado no cabeçalho `Authorization: Bearer <token>`. O sistema agora utiliza **Access Tokens** (curta duração) e **Refresh Tokens** (longa duração) para maior segurança.
 - **Rate Limit**: Por padrão, o projeto possui limites de requisições configurados no `main.py` para evitar abusos nos endpoints.
-- **Validação Localizada**: Todas as mensagens de erro de validação (campos obrigatórios, e-mails inválidos, formatos incorretos) são retornadas automaticamente em **Português do Brasil**.
+- **Validação Localizada**: Todas as mensagens de erro de validação (campos obrigatórios, e-mails inválidos, formatos incorretos) são retornadas automaticamente em **Português do Brasil**. A API implementa validações rigorosas em múltiplas camadas (Pydantic e Banco de Dados) para garantir a integridade dos dados e evitar erros inesperados do servidor (500 Internal Server Error).
 
 ## 📖 Guia de Uso da API
 

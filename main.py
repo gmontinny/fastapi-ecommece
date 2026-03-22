@@ -63,6 +63,9 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         elif "value_error.number.not_ge" in type or "greater_than_equal" in type:
             limit = error.get("ctx", {}).get("ge")
             translated_msg = f"O valor deve ser maior ou igual a {limit}"
+        elif "value_error.number.not_gt" in type or "greater_than" in type:
+            limit = error.get("ctx", {}).get("gt")
+            translated_msg = f"O valor deve ser maior que {limit}"
         elif "string_pattern_mismatch" in type:
             translated_msg = "O formato fornecido para este campo é inválido"
         elif "assertion_failed" in type:
@@ -71,10 +74,10 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             translated_msg = "O valor deve ser um número inteiro"
         elif "type_error.decimal" in type or "decimal_parsing" in type:
             translated_msg = "O valor deve ser um número decimal válido"
-        elif "too_short" in type:
+        elif "too_short" in type or "string_too_short" in type:
             limit = error.get("ctx", {}).get("min_length") or error.get("ctx", {}).get("limit_value")
             translated_msg = f"O campo deve ter pelo menos {limit} caracteres/itens"
-        elif "too_long" in type:
+        elif "too_long" in type or "string_too_long" in type:
             limit = error.get("ctx", {}).get("max_length") or error.get("ctx", {}).get("limit_value")
             translated_msg = f"O campo deve ter no máximo {limit} caracteres/itens"
         else:
